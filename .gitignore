@@ -1,0 +1,13 @@
+*~
+\#*#
+.\#*
+*.elc
+bookmarks
+custom.el
+eln-cache
+elpa/
+eshell/
+places
+projects
+recentf
+history
