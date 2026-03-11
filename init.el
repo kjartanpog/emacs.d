@@ -333,13 +333,20 @@
 
 ;;; Org mode
 
-;; (use-package org-mode
-;;   :defer t)
+(use-package org
+  :defer t)
 
 (use-package ox-reveal
+  :after org
   :ensure t
   :config
   (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+
+(use-package org-download
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'org-download-enable))
 
 ;;; Additional keymaps
 
