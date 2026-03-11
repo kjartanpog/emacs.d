@@ -154,7 +154,6 @@
   ;; (prog-mode-hook . electric-quote-local-mode-hook)
   )
 
-
 ;;; Projects
 
 (use-package project
@@ -349,8 +348,17 @@
   was activated and inserts it at point."
   (interactive)
   (insert (buffer-name (window-buffer (minibuffer-selected-window)))))
-
 (global-set-key (kbd "C-c b n") #'insert-buffer-name-ignoring-minibuffer)
+
+(defun insert-current-iso-date ()
+  "Insert the current date in ISO format (YYYY-MM-DD)."
+  (interactive)
+  (insert (format-time-string "%Y-%m-%d")))
+(global-set-key (kbd "C-c d") 'insert-current-iso-date)
+
+(global-set-key (kbd "M-o") 'other-window)
+
+(global-set-key (kbd "C-þ") (key-binding (kbd "C-/")))
 
 ;;; Load additional files
 
