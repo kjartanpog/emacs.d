@@ -1,9 +1,26 @@
 ;; -*- lexical-binding: t; -*-
 
+;;; Package initialization
+
+(require 'package)
+(package-initialize)
+
+(setq package-archives '(("melpa"        . "https://melpa.org/packages/")
+                         ("gnu"          . "https://elpa.gnu.org/packages/")
+                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")))
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(require 'use-package)
+
 ;;; Early init
 
 (set-fringe-mode 16)
 (let ((f (expand-file-name "early-local.el" user-emacs-directory)))
+  (if (file-exists-p f)
+      (load f)))
+(let ((f (expand-file-name "org-latex.el" user-emacs-directory)))
   (if (file-exists-p f)
       (load f)))
 
@@ -33,19 +50,6 @@
 (delete-selection-mode t)
 (global-auto-revert-mode t)
 
-;;; Package initialization
-
-(require 'package)
-(package-initialize)
-
-(setq package-archives '(("melpa"        . "https://melpa.org/packages/")
-                         ("gnu"          . "https://elpa.gnu.org/packages/")
-                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/")
-                         ("melpa-stable" . "https://stable.melpa.org/packages/")))
-(unless package-archive-contents
-  (package-refresh-contents))
-
-(require 'use-package)
 
 ;;; History, backups, customization
 
@@ -307,7 +311,13 @@
   :config
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t
-        modus-themes-mixed-fonts t)
+        modus-themes-mixed-fonts t
+        modus-themes-headings
+        '((1 . (variable-pitch 1.5))
+          (2 . (1.3))
+          (agenda-date . (1.3))
+          (agenda-structure . (variable-pitch light 1.8))
+          (t . (1.1))))
   (modus-themes-load-theme 'modus-operandi))
 
 ;;; UI
@@ -334,13 +344,16 @@
 ;;; Org mode
 
 (use-package org
-  :defer t)
+  :defer t
+  :config
+  (setq org-hide-leading-stars t))
 
 (use-package ox-reveal
   :after org
   :ensure t
   :config
-  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+  )
 
 (use-package org-download
   :ensure t
@@ -370,3 +383,19 @@
 ;;; Load additional files
 
 (load custom-file)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-vc-selected-packages
+   '((org-mode :url "https://code.tecosaur.net/tec/org-mode" :branch
+	       "dev" :lisp-dir "lisp")
+     (fringe-scale :url
+		   "https://github.com/blahgeek/emacs-fringe-scale.git"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
