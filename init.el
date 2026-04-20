@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-;;; Package initialization
+;;; | Package initialization
 
 (require 'package)
 (package-initialize)
@@ -14,9 +14,9 @@
 
 (require 'use-package)
 
-;;; Early init
+;;; | Early init
 
-(set-fringe-mode 16)
+(set-fringe-mode 8)
 (let ((f (expand-file-name "early-local.el" user-emacs-directory)))
   (if (file-exists-p f)
       (load f)))
@@ -24,21 +24,21 @@
   (if (file-exists-p f)
       (load f)))
 
-;;; Frame size
+;;; | Frame size
 
-(let* ((phi 0.618)
-       (display-w (display-pixel-width))
-       (display-h (display-pixel-height))
-       (frame-w (floor (* phi display-w)))
-       (frame-h (floor (* phi display-h)))
-       (left (/ (- display-w frame-w) 2))
-       (top (/ (- display-h frame-h) 2)))
-  (add-to-list 'default-frame-alist `(width . (text-pixels . ,frame-w)))
-  (add-to-list 'default-frame-alist `(height . (text-pixels . ,frame-h)))
-  (set-frame-size (selected-frame) frame-w frame-h t)
-  (set-frame-position (selected-frame) left top))
+;; (let* ((phi 0.618)
+;;        (display-w (display-pixel-width))
+;;        (display-h (display-pixel-height))
+;;        (frame-w (floor (* phi display-w)))
+;;        (frame-h (floor (* phi display-h)))
+;;        (left (/ (- display-w frame-w) 2))
+;;        (top (/ (- display-h frame-h) 2)))
+;;   (add-to-list 'default-frame-alist `(width . (text-pixels . ,frame-w)))
+;;   (add-to-list 'default-frame-alist `(height . (text-pixels . ,frame-h)))
+;;   (set-frame-size (selected-frame) frame-w frame-h t)
+;;   (set-frame-position (selected-frame) left top))
 
-;;; Sane defaults
+;;; | Sane defaults
 
 (set-default-coding-systems 'utf-8)
 (setq inhibit-startup-message t)
@@ -51,7 +51,7 @@
 (global-auto-revert-mode t)
 
 
-;;; History, backups, customization
+;;; | History, backups, customization
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (use-package savehist
@@ -59,7 +59,6 @@
   (savehist-mode))
 
 (use-package recentf
-  :bind (("C-x C-r" . recentf))
   :init
   (recentf-mode t))
 
@@ -75,7 +74,7 @@
   :init
   (save-place-mode t))
 
-;;; Minibuffer
+;;; | Minibuffer
 
 (use-package vertico
   :ensure t
@@ -108,7 +107,7 @@
   :init
   (marginalia-mode))
 
-;;; Completions
+;;; | Completions
 
 (use-package orderless
   :ensure t
@@ -138,15 +137,15 @@
   (tab-always-indent 'complete)
   (read-extended-command-predicate #'command-completion-default-include-p))
 
-;;; Line numbers
+;;; | Line numbers
 
 (use-package display-line-numbers
   :custom
-  (display-line-numbers-type 'relative)
+  ;; (display-line-numbers-type 'relative)
   (display-line-numbers-width-start 3)
   :hook (prog-mode-hook . display-line-numbers-mode))
 
-;;; Auto indent, layout, quotes
+;;; | Auto indent, layout, quotes
 
 (use-package electric
   :config
@@ -158,7 +157,7 @@
   ;; (prog-mode-hook . electric-quote-local-mode-hook)
   )
 
-;;; Projects
+;;; | Projects
 
 (use-package project
   ;; :defer t
@@ -169,7 +168,7 @@
   (add-to-list 'project-find-functions #'my/project-ignore-nix-store)
   (setq project-mode-line t))
 
-;;; Navigation, folding
+;;; | Navigation, folding
 
 (use-package consult
   :ensure t
@@ -279,6 +278,7 @@
 
 
 (use-package outline
+  ;; :disabled t
   :custom
   (outline-minor-mode-prefix (kbd "C-c C-o"))
   (outline-minor-mode-cycle t)
@@ -287,26 +287,29 @@
   (defun my/elisp-outline-minor-mode-setup ()
     (setq-local outline-regexp "^;;;+")
     (outline-minor-mode t)
+    (when (and (buffer-file-name)
+               (string-match-p "init\\.el\\'" (buffer-file-name)))
+      (outline-hide-sublevels 1))
     )
   :hook
-  (emacs-lisp-mode . my/elisp-outline-minor-mode-setup))
+  (emacs-lisp-mode . my/elisp-outline-minor-mode-setup)
+  )
 
-;;; Indentation
+;;; | Indentation
 
 (use-package simple
   :config
   (setq-default indent-tabs-mode nil))
 
-;;; Helpful infomation
+;;; | Helpful infomation
 
 (use-package which-key
   :init
   (which-key-mode t))
 
-;;; Theme
+;;; | Theme
 
 (use-package modus-themes
-  ;; :disabled t
   :ensure t
   :config
   (setq modus-themes-italic-constructs t
@@ -318,9 +321,15 @@
           (agenda-date . (1.3))
           (agenda-structure . (variable-pitch light 1.8))
           (t . (1.1))))
-  (modus-themes-load-theme 'modus-operandi))
+  (modus-themes-load-theme 'modus-operandi)
+  )
 
-;;; UI
+;;; | UI
+
+(use-package emacs
+  ;; :disabled t
+  :config
+  (tool-bar-mode -1))
 
 (use-package emacs
   :config
@@ -330,7 +339,7 @@
   (set-window-scroll-bars (minibuffer-window) nil nil nil nil 1)
   (set-window-parameter (get-buffer-window "*Messages*") 'vertical-scroll-bars nil))
 
-;;; Nix
+;;; | Nix
 
 (use-package nix-ts-mode
   :ensure t
@@ -341,7 +350,7 @@
   :hook
   (nix-ts-mode . my/nix-ts-mode-setup))
 
-;;; Org mode
+;;; | Org mode
 
 (use-package org
   :defer t
@@ -361,26 +370,45 @@
   :config
   (add-hook 'org-mode-hook 'org-download-enable))
 
-;;; Additional keymaps
+;;; | Version Control
 
-(defun insert-buffer-name-ignoring-minibuffer ()
-  "Gets the name of the buffer that was current before the minibuffer
-  was activated and inserts it at point."
-  (interactive)
-  (insert (buffer-name (window-buffer (minibuffer-selected-window)))))
-(global-set-key (kbd "C-c b n") #'insert-buffer-name-ignoring-minibuffer)
+(use-package diff-hl
+  :ensure t
+  :config
+  (global-diff-hl-mode t)
+  )
 
-(defun insert-current-iso-date ()
-  "Insert the current date in ISO format (YYYY-MM-DD)."
-  (interactive)
-  (insert (format-time-string "%Y-%m-%d")))
-(global-set-key (kbd "C-c d") 'insert-current-iso-date)
+;;; ├──────────────────── GENERAL EMACS CONFIG ────────────────────┤
+;;; | Additional keymaps
 
-(global-set-key (kbd "M-o") 'other-window)
+(use-package emacs
+  :ensure nil
+  :bind
+  (("M-o" . other-window)
+   ("M-g r" . recentf)
+   ("C-þ" . undo)
+   ("C-x C-b" . ibuffer)
+   ("M-J" . duplicate-dwim)
+   ([remap capitalize-word] . capitalize-dwim)       ; Make M-c work on regions
+   ([remap downcase-word] . downcase-dwim)           ; Make M-l work on regions
+   ([remap upcase-word] . upcase-dwim)               ; Make M-u work on regions
+   ([remap kill-buffer] . kill-current-buffer)       ; C-x k stops prompting for buffer to kill
+   ))
 
-(global-set-key (kbd "C-þ") (key-binding (kbd "C-/")))
+;; (defun insert-buffer-name-ignoring-minibuffer ()
+;;   "Gets the name of the buffer that was current before the minibuffer
+;;   was activated and inserts it at point."
+;;   (interactive)
+;;   (insert (buffer-name (window-buffer (minibuffer-selected-window)))))
+;; (global-set-key (kbd "C-c b n") #'insert-buffer-name-ignoring-minibuffer)
 
-;;; Load additional files
+;; (defun insert-current-iso-date ()
+;;   "Insert the current date in ISO format (YYYY-MM-DD)."
+;;   (interactive)
+;;   (insert (format-time-string "%Y-%m-%d")))
+;; (global-set-key (kbd "C-c d") 'insert-current-iso-date)
+
+;;; | Load additional files
 
 (load custom-file)
 (custom-set-variables
@@ -390,12 +418,11 @@
  ;; If there is more than one, they won't work right.
  '(package-vc-selected-packages
    '((org-mode :url "https://code.tecosaur.net/tec/org-mode" :branch
-	       "dev" :lisp-dir "lisp")
-     (fringe-scale :url
-		   "https://github.com/blahgeek/emacs-fringe-scale.git"))))
+	       "dev" :lisp-dir "lisp"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
