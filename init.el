@@ -3,12 +3,14 @@
 ;;; | Package initialization
 
 (require 'package)
-(package-initialize)
+
 
 (setq package-archives '(("melpa"        . "https://melpa.org/packages/")
                          ("gnu"          . "https://elpa.gnu.org/packages/")
                          ("nongnu"       . "https://elpa.nongnu.org/nongnu/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")))
+(package-initialize)
+
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -40,7 +42,9 @@
 
 ;;; | Sane defaults
 
+(prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8)
 (setq inhibit-startup-message t)
 (setq ring-bell-function 'ignore)
 (setq-default truncate-lines t)
@@ -350,12 +354,17 @@
   :hook
   (nix-ts-mode . my/nix-ts-mode-setup))
 
-;;; | Org mode
+;;; ├────── ORG MODE
+;;; | org
 
 (use-package org
   :defer t
+  :hook (org-mode . auto-fill-mode)
   :config
-  (setq org-hide-leading-stars t))
+  (setq org-hide-leading-stars t
+        org-list-allow-alphabetical t))
+
+;;; | ox-reveal
 
 (use-package ox-reveal
   :after org
@@ -364,13 +373,48 @@
   (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
   )
 
+;;; | org-download
+
 (use-package org-download
   :ensure t
   :after org
   :config
   (add-hook 'org-mode-hook 'org-download-enable))
 
-;;; | Version Control
+;;; | org-roam
+
+(use-package org-roam
+  :ensure t
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :custom
+  (org-roam-directory (expand-file-name "org-roam" user-emacs-directory))
+  :config
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode t)
+  (add-to-list 'org-roam-capture-templates
+             '("s" "skilgreining" plain
+               "\n* Skilgreining\n\n%?\n\n* Heimildir\n"
+               :if-new
+               (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                          "#+title: ${title}\n\n")
+               :unnarrowed t)))
+
+(use-package org-roam-ui
+  :after org-roam
+  :ensure t
+  :config
+  (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
+;;; ├────── Version Control
 
 (use-package diff-hl
   :ensure t
@@ -378,7 +422,7 @@
   (global-diff-hl-mode t)
   )
 
-;;; ├──────────────────── GENERAL EMACS CONFIG ────────────────────┤
+;;; ├────── GENERAL EMACS CONFIG
 ;;; | Additional keymaps
 
 (use-package emacs

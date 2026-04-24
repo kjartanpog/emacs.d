@@ -12,3 +12,5 @@ projects
 recentf
 history
 early-local.el
+org-roam.db
+org-roam/
