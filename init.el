@@ -136,6 +136,13 @@
   (corfu-history-mode)
   (corfu-popupinfo-mode))
 
+(use-package cape
+  :disabled t
+  :ensure t
+  :after corfu
+  :config
+  (add-to-list 'completion-at-point-functions #'cape-abbrev))
+
 (use-package emacs
   :custom
   (tab-always-indent 'complete)
@@ -354,7 +361,22 @@
   :hook
   (nix-ts-mode . my/nix-ts-mode-setup))
 
-;;; ├────── ORG MODE
+;;; | Abbreviations
+
+(use-package abbrev
+  :ensure nil  ;; built-in
+  :custom
+  (save-abbrevs nil)
+  :config
+  ;; (setq-default abbrev-mode t)
+
+  (define-abbrev-table 'global-abbrev-table
+    '(("today" ""
+       (lambda ()
+         (insert (format-time-string "%Y-%m-%d")))
+       ))))
+
+;;; ├────── Org Mode
 ;;; | org
 
 (use-package org
@@ -363,6 +385,11 @@
   :config
   (setq org-hide-leading-stars t
         org-list-allow-alphabetical t))
+
+;;; | org-mouse
+
+(use-package org-mouse
+  :after org)
 
 ;;; | ox-reveal
 
@@ -422,7 +449,7 @@
   (global-diff-hl-mode t)
   )
 
-;;; ├────── GENERAL EMACS CONFIG
+;;; ├────── General Emacs Config
 ;;; | Additional keymaps
 
 (use-package emacs
