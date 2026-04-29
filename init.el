@@ -22,9 +22,9 @@
 (let ((f (expand-file-name "early-local.el" user-emacs-directory)))
   (if (file-exists-p f)
       (load f)))
-(let ((f (expand-file-name "org-latex.el" user-emacs-directory)))
-  (if (file-exists-p f)
-      (load f)))
+;; (let ((f (expand-file-name "org-latex.el" user-emacs-directory)))
+;;   (if (file-exists-p f)
+;;       (load f)))
 
 ;;; | Frame size
 
@@ -68,7 +68,6 @@
    ))
 
 ;;; ├────── Stuff
-
 ;;; | History, backups, customization
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -339,15 +338,20 @@
   :config
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t
-        modus-themes-mixed-fonts t
-        modus-themes-headings
+        modus-themes-mixed-fonts t)
+  (setq modus-themes-headings
         '((1 . (variable-pitch 1.5))
           (2 . (1.3))
           (agenda-date . (1.3))
           (agenda-structure . (variable-pitch light 1.8))
           (t . (1.1))))
-  (modus-themes-load-theme 'modus-operandi)
-  )
+  (setq modus-themes-common-palette-overrides
+        '(;; Region
+          (bg-region bg-ochre)
+          (fg-region unspecified)
+          ;; Headings
+          (fg-heading-1 cyan)))
+  (modus-themes-load-theme 'modus-operandi))
 
 ;;; | UI
 
