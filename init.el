@@ -40,7 +40,8 @@
 ;;   (set-frame-size (selected-frame) frame-w frame-h t)
 ;;   (set-frame-position (selected-frame) left top))
 
-;;; | Sane defaults
+;;; ├────── Better Defaults
+;;; | General
 
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -54,6 +55,19 @@
 (delete-selection-mode t)
 (global-auto-revert-mode t)
 
+;;; | Editing
+
+(use-package simple
+  :ensure nil
+  :bind
+  (("M-J" . duplicate-dwim)
+   ([remap capitalize-word] . capitalize-dwim)       ; Make M-c work on regions
+   ([remap downcase-word] . downcase-dwim)           ; Make M-l work on regions
+   ([remap upcase-word] . upcase-dwim)               ; Make M-u work on regions
+   ([remap kill-buffer] . kill-current-buffer)       ; C-x k stops prompting for buffer to kill
+   ))
+
+;;; ├────── Stuff
 
 ;;; | History, backups, customization
 
@@ -443,6 +457,12 @@
 
 ;;; ├────── Version Control
 
+(use-package vc
+  :ensure nil
+  :defer t
+  :config
+  (setq vc-follow-symlinks t))
+
 (use-package diff-hl
   :ensure t
   :config
@@ -457,13 +477,8 @@
   :bind
   (("M-o" . other-window)
    ("M-g r" . recentf)
-   ("C-þ" . undo)
    ("C-x C-b" . ibuffer)
-   ("M-J" . duplicate-dwim)
-   ([remap capitalize-word] . capitalize-dwim)       ; Make M-c work on regions
-   ([remap downcase-word] . downcase-dwim)           ; Make M-l work on regions
-   ([remap upcase-word] . upcase-dwim)               ; Make M-u work on regions
-   ([remap kill-buffer] . kill-current-buffer)       ; C-x k stops prompting for buffer to kill
+   ("C-þ" . undo)
    ))
 
 ;; (defun insert-buffer-name-ignoring-minibuffer ()
