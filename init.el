@@ -19,12 +19,7 @@
 ;;; | Early init
 
 (set-fringe-mode 8)
-(let ((f (expand-file-name "early-local.el" user-emacs-directory)))
-  (if (file-exists-p f)
-      (load f)))
-;; (let ((f (expand-file-name "org-latex.el" user-emacs-directory)))
-;;   (if (file-exists-p f)
-;;       (load f)))
+
 
 ;;; | Frame size
 
@@ -501,18 +496,13 @@
 ;;; | Load additional files
 
 (load custom-file)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-vc-selected-packages
-   '((org-mode :url "https://code.tecosaur.net/tec/org-mode" :branch
-	       "dev" :lisp-dir "lisp"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
+;; (let ((f (expand-file-name "early-local.el" user-emacs-directory)))
+;;   (if (file-exists-p f)
+;;       (load f)))
+;; (let ((f (expand-file-name "local.el" user-emacs-directory)))
+;;   (if (file-exists-p f)
+;;       (load f)))
+(dolist (file '("early-local.el" "local.el"))
+  (let ((path (expand-file-name file user-emacs-directory)))
+    (when (file-exists-p path)
+      (load path))))

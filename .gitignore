@@ -11,6 +11,7 @@ places
 projects
 recentf
 history
+local.el
 early-local.el
 org-roam.db
 org-roam/
