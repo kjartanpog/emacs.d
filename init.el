@@ -456,17 +456,30 @@
 
 ;;; ├────── Version Control
 
+;;; | Emacs vc
+
 (use-package vc
   :ensure nil
   :defer t
   :config
   (setq vc-follow-symlinks t))
 
+;;; | Gutter Indicators
+
 (use-package diff-hl
   :ensure t
   :config
   (global-diff-hl-mode t)
   )
+
+;;; ├────── Tree-sitter
+
+;;; | Folding
+
+(use-package treesit-fold
+  :ensure t
+  :vc (:url "https://github.com/emacs-tree-sitter/treesit-fold"
+       :rev :newest))
 
 ;;; ├────── General Emacs Config
 ;;; | Additional keymaps
