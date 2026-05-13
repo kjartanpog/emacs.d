@@ -41,7 +41,7 @@
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8)
-(setq inhibit-startup-message t)
+;; (setq inhibit-startup-message t)
 (setq ring-bell-function 'ignore)
 (setq-default truncate-lines t)
 (setq delete-by-moving-to-trash t)
@@ -340,22 +340,28 @@
           (agenda-date . (1.3))
           (agenda-structure . (variable-pitch light 1.8))
           (t . (1.1))))
-  (setq modus-themes-common-palette-overrides
-        '(;; Region
-          (bg-region bg-ochre)
-          (fg-region unspecified)
-          ;; Headings
-          (fg-heading-1 cyan)))
+(let ((overrides '(;; Region
+                   (bg-region bg-ochre)
+                   (fg-region unspecified)
+                   ;; Headings
+                   (fg-heading-1 cyan))))
+  (setq modus-operandi-palette-overrides overrides
+        modus-vivendi-palette-overrides overrides))
+  (modus-themes-include-derivatives-mode t)
   (modus-themes-load-theme 'modus-operandi))
+
+(use-package standard-themes
+  :ensure t)
 
 ;;; | UI
 
 (use-package emacs
-  ;; :disabled t
+  :disabled t
   :config
   (tool-bar-mode -1))
 
 (use-package emacs
+  :disabled t
   :config
   (if (eq system-type 'gnu/linux)
       (setq x-gtk-stock-map nil
