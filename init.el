@@ -49,6 +49,7 @@
 (context-menu-mode t)
 (delete-selection-mode t)
 (global-auto-revert-mode t)
+(column-number-mode t)
 
 ;;; | Editing
 
@@ -353,6 +354,13 @@
 (use-package standard-themes
   :ensure t)
 
+(use-package spacious-padding
+  :ensure t
+  :custom
+  (spacious-padding-widths '(:mode-line-width 0))
+  :config
+  (spacious-padding-mode t))
+
 ;;; | UI
 
 (use-package emacs
@@ -361,13 +369,13 @@
   (tool-bar-mode -1))
 
 (use-package emacs
-  :disabled t
   :config
   (if (eq system-type 'gnu/linux)
       (setq x-gtk-stock-map nil
             tool-bar-style 'image))
   (set-window-scroll-bars (minibuffer-window) nil nil nil nil 1)
-  (set-window-parameter (get-buffer-window "*Messages*") 'vertical-scroll-bars nil))
+  ;; (set-window-parameter (get-buffer-window "*Messages*") 'vertical-scroll-bars nil)
+  )
 
 ;;; | Nix
 
