@@ -520,6 +520,10 @@
 ;;   (insert (format-time-string "%Y-%m-%d")))
 ;; (global-set-key (kbd "C-c d") 'insert-current-iso-date)
 
+;;; | Scrolling
+(use-package emacs
+  :config
+  (setq scroll-margin 3))
 ;;; | Load additional files
 
 (load custom-file)
