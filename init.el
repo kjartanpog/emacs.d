@@ -113,6 +113,29 @@
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
+(use-package vertico-posframe
+  :disabled t
+  :ensure t
+  :after vertico
+  :config
+  (defun my/vertico-posframe-size ()
+    (setq vertico-posframe-width
+          (floor (* 0.7 (frame-width)))
+          ;;         vertico-posframe-height
+          ;; (floor (* 0.3 (frame-height)))
+          ))
+  
+  ;; Set initially
+  (my/vertico-posframe-size)
+
+  ;; Update after frame resize
+  (add-hook 'window-size-change-functions
+            (lambda (_frame)
+              (my/vertico-posframe-size)))
+
+  (vertico-posframe-mode t)
+  )
+
 (use-package marginalia
   :ensure t
   :bind (:map minibuffer-local-map
