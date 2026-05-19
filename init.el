@@ -432,14 +432,26 @@
 (use-package org
   :defer t
   :hook (org-mode . auto-fill-mode)
-  :config
-  (setq org-hide-leading-stars t
-        org-list-allow-alphabetical t))
+  :custom
+  (org-hide-leading-stars)
+  (org-list-allow-alphabetical t)
+  (org-hide-emphasis-markers t)
+  ;; :config
+  ;; (setq org-hide-leading-stars t
+  ;;       org-list-allow-alphabetical t)
+  )
 
 ;;; | org-mouse
 
 (use-package org-mouse
   :after org)
+
+;;; | org-appear
+
+(use-package org-appear
+  :after org
+  :ensure t
+  :hook (org-mode . org-appear-mode))
 
 ;;; | ox-reveal
 
