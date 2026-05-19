@@ -505,13 +505,58 @@
 
 ;;; ├────── Version Control
 
-;;; | Emacs vc
+;;; | vc
 
 (use-package vc
   :ensure nil
   :defer t
   :config
   (setq vc-follow-symlinks t))
+
+;;; | agitate
+
+(use-package agitate
+  :vc (:url "https://github.com/protesilaos/agitate"
+            :branch "master")
+  :hook
+  (diff-mode . agitate-diff-enable-outline-minor-mode)
+  
+  :bind
+  (;; Global bindings
+   ("C-x v =" . agitate-diff-buffer-or-file)
+   ("C-x v g" . agitate-vc-git-grep)
+   ("C-x v f" . agitate-vc-git-find-revision)
+   ("C-x v s" . agitate-vc-git-show)
+   ("C-x v p p" . agitate-vc-git-format-patch-single)
+   ("C-x v p n" . agitate-vc-git-format-patch-n-from-head)
+
+   ;; diff-mode-map
+   :map diff-mode-map
+   ("C-c C-b" . agitate-diff-refine-cycle)
+   ("C-c C-n" . agitate-diff-narrow-dwim)
+
+   ;; log-view-mode-map
+   :map log-view-mode-map
+   ("w" . agitate-log-view-kill-revision)
+   ("W" . agitate-log-view-kill-revision-expanded)
+
+   ;; vc-git-log-view-mode-map
+   :map vc-git-log-view-mode-map
+   ("c" . agitate-vc-git-format-patch-single)
+
+   ;; log-edit-mode-map
+   :map log-edit-mode-map
+   ("C-c C-i C-n" . agitate-log-edit-insert-file-name)
+   ("C-c C-i C-e" . agitate-log-edit-emoji-commit)
+   ("C-c C-i C-c" . agitate-log-edit-conventional-commit))
+
+  :init
+  (advice-add #'vc-git-push
+              :override
+              #'agitate-vc-git-push-prompt-for-remote)
+
+  :config
+  (agitate-log-edit-informative-mode 1))
 
 ;;; | Gutter Indicators
 
