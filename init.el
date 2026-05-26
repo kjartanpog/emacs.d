@@ -350,6 +350,23 @@
   :init
   (which-key-mode t))
 
+;;; ├────── UI
+;;; | Tool Bar
+
+(use-package emacs
+  :disabled t
+  :config
+  (tool-bar-mode -1))
+
+(use-package emacs
+  :config
+  (if (eq system-type 'gnu/linux)
+      (setq x-gtk-stock-map nil
+            tool-bar-style 'image))
+  (set-window-scroll-bars (minibuffer-window) nil nil nil nil 1)
+  ;; (set-window-parameter (get-buffer-window "*Messages*") 'vertical-scroll-bars nil)
+  )
+
 ;;; | Theme
 
 (use-package modus-themes
@@ -384,20 +401,14 @@
   :config
   (spacious-padding-mode t))
 
-;;; | UI
+;;; | Modeline
 
 (use-package emacs
-  :disabled t
-  :config
-  (tool-bar-mode -1))
-
-(use-package emacs
-  :config
-  (if (eq system-type 'gnu/linux)
-      (setq x-gtk-stock-map nil
-            tool-bar-style 'image))
-  (set-window-scroll-bars (minibuffer-window) nil nil nil nil 1)
-  ;; (set-window-parameter (get-buffer-window "*Messages*") 'vertical-scroll-bars nil)
+  :ensure nil
+  :if (version<= "31" emacs-version)
+  :custom
+  (mode-line-collapse-minor-modes t)
+  ;; (mode-line-modes-delimiters nil)
   )
 
 ;;; | Nix
@@ -436,7 +447,6 @@
   (org-hide-leading-stars)
   (org-list-allow-alphabetical t)
   (org-hide-emphasis-markers t)
-  ;; :config
   ;; (setq org-hide-leading-stars t
   ;;       org-list-allow-alphabetical t)
   )
