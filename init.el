@@ -444,7 +444,7 @@
   :defer t
   :hook (org-mode . auto-fill-mode)
   :custom
-  (org-hide-leading-stars)
+  (org-hide-leading-stars t)
   (org-list-allow-alphabetical t)
   (org-hide-emphasis-markers t)
   ;; (setq org-hide-leading-stars t
